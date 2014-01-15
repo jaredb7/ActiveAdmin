@@ -15,15 +15,14 @@ and the original author
 
 Features
  * A awesome looking Admin page/s out of the box =D.
- * Search Filters (in addition to using $displayField, add $aaFilter model variable with an array of field names, see step 8. http://imgur.com/YaeJfAC)
+ * Search Filters (in addition to using $displayField, add $aaFilter variable in your model with an array of field names to have them as additional filter fields, see step 8.)
+ * Scopes to creation sections/groups of data (requires some work on your behalf writing custom findTypes, see 9.)
+ * Ability to export data from view in common formats (CSV, JSON, XML)
  * Admin Comments (can be disabled app-wide or on per model basis)
- * Scopes (requires some work on your behalf writing custom findTypes, see 9.)
  * Basic Authentication (as implemented by s-okami)
- * Some minor integration/support for the Authake (disables the internal Auth system if this plugin is loaded)
  * Works with CakePHP 2.3.X
 
 Future features & enhancements
- *   Ability to download data from view in common formats
  *   Batch actions (like ROR), but only for deleting
  *   Dashboard settings to choosing what controllers to link in menu and such (replacement of step 6.)
 
@@ -38,7 +37,7 @@ Future features & enhancements
 ### Prepare your app's controllers
 
 3 - For the admin_index function:
-
+```
     function admin_index() {
         $this->Post->recursive = 0;
         // Add this 
@@ -48,10 +47,10 @@ Future features & enhancements
         //Comment out this line (usually the last line if you baked your Controllers and such)
         $this->set('posts', $this->paginate());
     }
-
+```
 4 - And update your View/(Controller)/admin_index.ctp views, using a table-header element that enable table-sorting:
    > [NOTE]:: This seems to be happening by default now? I baked most of my app in 2.2.X
-
+```
     <table cellpadding="0" cellspacing="0">
     <?php echo $this->element('table_header', array('keys'=>array('id', 'title', 'label' => 'slug','created', 'modified')), array('plugin'=>'ActiveAdmin')); ?>
       <?php
@@ -76,11 +75,11 @@ Future features & enhancements
       </tr>
     <?php endforeach; ?>
     </table>
-
+```
 5 - Create the table for ActiveAdmin using the schema shell:
-    
+```   
     ./Console/cake schema create --plugin ActiveAdmin --name dashboard
-
+```
 #ADDITIONAL
 5.1 - And run the Config/Schema/users.sql ( if you want to use Authentication provided by s.okami :) )
 5.2 - And run the Config/Schema/admin_comments.sql for AdminComments
@@ -88,7 +87,8 @@ Future features & enhancements
 6 - Admin Comments, these are on by default, see ActiveAdmin bootstrap to turn them off globally
     To turn them off on a per model basis, simply add the public variable $aaNoComment = true to them.
 
-    Finally, data integrity, add this to your app's AppModel, this should remove comments associated with a item/resource when it gets deleted
+Finally, data integrity, add this to your app's AppModel, this should remove comments associated with a item/resource when it gets deleted
+```
       public function afterDelete()
         {
             //If the active_admin plugin is loaded remove any comments
@@ -99,12 +99,13 @@ Future features & enhancements
             }
             return true;
         }
+```
 
 7 - Adding Admin Menu controller items can be done via the provided console shell (eg. adding Posts or the Categories from Blog plugin)
-    
+```    
     ./Console/cake ActiveAdmin.resource Posts
     ./Console/cake ActiveAdmin.resource Blog.Categories
-
+```
 8 - OPTIONAL -- Additional Filters
     To obtain additional filters simply add the $aaFilter to your models
         eg. public $aaFilter = array("start_desc", "start_platform", "end_desc", "end_platform");
@@ -116,11 +117,13 @@ Future features & enhancements
      could simple write, $Products->find('recent') to retrieve these
        http://book.cakephp.org/2.0/en/models/retrieving-your-data.html#creating-custom-find-types
 
-     You have to also add the 'Paginator' component to your AppController or on per controller basis.
+You have to also add the 'Paginator' component to your AppController or on per controller basis.
+```
         eg. public $components = array('Paginator');
+```
 
 > NOTE If you're experiencing some issues with the filter, make sure that the display field is set in your model:
-    
+```    
     var $displayField = "title";
-    
+```    
 The above would set the filter search on the title field of the model. It will default to ID otherwise and for some reason doesn't show
