@@ -51,8 +51,7 @@
         </div>
     </div>
 
-    <div <?php echo ($this->params['controller'] == 'dashboard') ? 'class="without_sidebar" ' : 'class="with_sidebar"' ?>
-        id="active_admin_content">
+    <div <?php echo ($this->params['controller'] == 'dashboard') ? 'class="without_sidebar" ' : 'class="with_sidebar"' ?> id="active_admin_content">
         <div id="main_content_wrapper">
             <div id="main_content">
                 <?php echo $this->Session->flash(); ?>
@@ -75,6 +74,7 @@
                 echo $this->fetch('content');
                 ?>
 
+                <!--links to download datasets-->
                 <?php if (Configure::read('ActiveAdmin.allow_downloads') == true): ?>
                     <div class="download_links">Download:&nbsp;
                         <?php echo $this->element('downloads', array(), array('plugin' => 'ActiveAdmin')); ?>
@@ -115,7 +115,6 @@
                     echo $this->element(strtolower($this->name) . '_edit_info');
                 }
             }
-
             ?>
         </div>
         <!-- end sidebar -->
@@ -123,6 +122,7 @@
         <div class="clear"></div>
         <div id="footer">
             <p>Base on <a href="http://www.activeadmin.info">Active Admin</a> 0.3.0</p>
+            <p>CakePHP Active Admin <?php echo ACTIVEADMIN_CAKE_VERSION ?></p>
         </div>
     </div>
     <!-- end active_admin_wrapper -->
