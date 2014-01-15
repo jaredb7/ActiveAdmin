@@ -14,6 +14,7 @@ class UsersController extends ActiveAdminAppController {
         */
         if (Configure::read('debug') > 0) {
             $this->Auth->allow('admin_add');
+            //TODO: Cant access user add when in dev mode
         }
     }
     
