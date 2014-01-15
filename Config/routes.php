@@ -11,6 +11,7 @@
 
 Router::connect('/admin', array('plugin' => 'active_admin', 'controller' => 'dashboard', 'action' => 'index', 'admin' => true));
 Router::connect('/admin/apis/:action/*', array('plugin' => 'active_admin', 'controller' => 'apis', 'admin' => true));
+Router::connect('/admin/export/*', array('plugin' => 'active_admin', 'controller' => 'download', 'action'=>'export', 'admin' => true));
 
 /*
     ログイン管理のルーティングをします
