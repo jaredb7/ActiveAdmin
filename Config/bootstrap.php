@@ -1,6 +1,6 @@
 <?php
 //Plugin version
-define('ACTIVEADMIN_CAKE_VERSION', "0.4.5");
+define('ACTIVEADMIN_CAKE_VERSION', "0.5.0");
 
 //Allow ActiveAdmin comments
 Configure::write('ActiveAdmin.allow_comments', true);

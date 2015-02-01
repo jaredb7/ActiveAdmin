@@ -1,3 +1,21 @@
+<?php
+$model_class_plugin = $model_class_name = null;
+$controller_name = Inflector::camelize(Inflector::singularize($this->request->params['controller']));
+$plugin_name = isset($this->request->params['plugin']) ? Inflector::camelize($this->request->params['plugin']) : null;
+
+//Figure out the model name by looking at what we are paging on
+if (isset($this->request->params['paging'])) {
+    //Following CakePHP conventions the model name is in the singularized version of the controller name.
+    //But to allow for situations where a app may use a non-standard model name, try to get it from the post data
+    $pos_model_name = array_keys($this->request->params['paging']);
+    //Then using that, look at the models key, use the key we found for paging
+    $models = $this->request->params['models'][$pos_model_name[0]];
+    //Read the classname, this is what we can use to load the model reliability
+    $model_class_plugin = $models['plugin'];
+    $model_class_name = $models['className'];
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,8 +42,8 @@
         <?php if ($this->params['action'] !== 'admin_login' && $adminMenu = $this->requestAction(array('plugin' => 'active_admin', 'controller' => 'dashboard', 'action' => 'menu'))): ?>
             <ul class="tabbed_navigation" id="tabs">
                 <?php foreach ($adminMenu as $menuItem): ?>
-                    <li<?php if ($this->params['controller'] == $menuItem['Dashboard']['url']['controller']) echo " class='current'" ?>
-                        ><?php echo $this->Html->link($menuItem['Dashboard']['display_title'], array_merge($menuItem['Dashboard']['url'], array('action' => 'index'))); ?></li>
+                    <li <?php if ($this->params['controller'] == $menuItem['Dashboard']['url']['controller']) echo " class='current'" ?> >
+                        <?php echo $this->Html->link($menuItem['Dashboard']['display_title'], array_merge($menuItem['Dashboard']['url'], array('action' => 'index'))); ?></li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
@@ -61,7 +79,11 @@
 
                 <!--Scopes-->
                 <div class="table_tools">
-                    <?php echo $this->element('scopes', array(), array('plugin' => 'ActiveAdmin')); ?>
+                    <?php echo $this->element('scopes', array(
+                            'source_controller' => $controller_name,
+                            'source_model' => $model_class_name,
+                            'source_plugin' => $model_class_plugin,)
+                        , array('plugin' => 'ActiveAdmin')); ?>
                 </div>
 
                 <!--Pagination text above table eg. (Displaying X-X of X)-->
@@ -81,7 +103,11 @@
                     if ($this->params['action'] == 'admin_index'):
                         ?>
                         <div class="download_links">Download:&nbsp;
-                            <?php echo $this->element('downloads', array(), array('plugin' => 'ActiveAdmin')); ?>
+                            <?php echo $this->element('downloads', array(
+                                    'source_controller' => $controller_name,
+                                    'source_model' => $model_class_name,
+                                    'source_plugin' => $model_class_plugin,)
+                                , array('plugin' => 'ActiveAdmin')); ?>
                         </div>
                     <?php endif;
                 endif; ?>
@@ -89,7 +115,11 @@
                 <!--Pagination at the bottom right of content area (has <Prev and next> links)-->
                 <?php
                 if (isset($this->Paginator) && $this->params['controller'] != 'dashboard') {
-                    echo $this->element('paging', array(), array('plugin' => 'ActiveAdmin'));
+                    echo $this->element('paging', array(
+                            'source_controller' => $controller_name,
+                            'source_model' => $model_class_name,
+                            'source_plugin' => $model_class_plugin,)
+                        , array('plugin' => 'ActiveAdmin'));
                 }
                 ?>
 
@@ -110,7 +140,10 @@
                 if ($file->exists()) {
                     echo $this->element(strtolower($this->name) . '_filter');
                 } else {
-                    echo $this->element('sidebar_filter', array(), array('plugin' => 'ActiveAdmin'));
+                    echo $this->element('sidebar_filter', array(
+                        'source_controller' => $controller_name,
+                        'source_model' => $model_class_name,
+                        'source_plugin' => $model_class_plugin,), array('plugin' => 'ActiveAdmin'));
                 }
             }
             if ($this->params['action'] == 'admin_add' || $this->params['action'] == 'admin_edit') {
@@ -126,9 +159,11 @@
 
         <div class="clear"></div>
         <div id="footer">
-            <p>Base on <a href="http://www.activeadmin.info">Active Admin</a> 0.3.0</p>
-
-            <p>CakePHP Active Admin <?php echo ACTIVEADMIN_CAKE_VERSION ?></p>
+            <p>
+                Base on <a href="http://www.activeadmin.info">Active Admin</a> 0.3.0
+                <br/>
+                CakePHP Active Admin <?php echo ACTIVEADMIN_CAKE_VERSION ?>
+            </p>
         </div>
     </div>
     <!-- end active_admin_wrapper -->

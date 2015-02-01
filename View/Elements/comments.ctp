@@ -1,6 +1,7 @@
 <?php
-
+//Get controller name
 $controller_name = $this->request->params['controller'];
+
 //If the controller name is set and we're not on the dashboard controller and not on the index or add action
 if (isset($controller_name)
     && (strtolower($this->request->params['controller']) != "dashboard")
@@ -21,4 +22,3 @@ if (isset($controller_name)
         echo $this->element('comment_add', array('controller_name' => $controller_name, 'resource_id' => $resource_id), array('plugin' => 'ActiveAdmin'));
     } //end if for (isset($resource_id)
 }//end if for (isset($controller_name)
-?>

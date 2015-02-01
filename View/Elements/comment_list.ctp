@@ -5,8 +5,11 @@ if (isset($controller_name) && isset($resource_id)) {
     //Retrieve the list of comments for this controller and resource_id
     $admin_comment = new AdminComment();
     $comments = $admin_comment->findComments($controller_name, $resource_id);
+    //Get comments count
+    $comment_count = !empty($comments) ? count($comments) : 0;
+
     ?>
-    <h3>Comments (<? echo count($comments) ?>)</h3>
+    <h3>Comments (<?php echo $comment_count ?>)</h3>
 
     <div class="panel_contents">
         <?php
@@ -26,6 +29,6 @@ if (isset($controller_name) && isset($resource_id)) {
         <?php endforeach;
         if (empty($comments)):?>
             <span class="empty">No comments yet.</span>
-        <?php endif?>
+        <?php endif ?>
     </div>
 <?php } ?>

@@ -31,20 +31,20 @@ class DownloadController extends ActiveAdminAppController
         if (array_key_exists('named', $this->params->named)) {
             //Get the controller name
             $controller_name = $this->params->named['named']['c'];
-            $dirty_model_name = $this->params->named['named']['c'];
+            $model_name = $this->params->named['named']['m'];
             //What export type was selected
             $type = $this->params->named['model']['type'];
         } else {
             //Get the controller name, it;l be the same as the model name
             $controller_name = $this->params->named['c'];
-            $dirty_model_name = $this->params->named['c'];
+            $model_name = $this->params->named['m'];
             //What export type was selected
             $type = $this->params->named['type'];
         }
 
         //Build the actual model name
-        $clean_model_name = Inflector::camelize(Inflector::singularize($dirty_model_name));
-        $model_name = $clean_model_name;
+//        $clean_model_name = Inflector::camelize(Inflector::singularize($model_name));
+//        $model_name = $clean_model_name;
 
         //Set the controller name and model names
         $this->name = Inflector::camelize($controller_name);
