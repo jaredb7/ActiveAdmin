@@ -108,7 +108,7 @@ Finally, data integrity, add this to your app's AppModel, this should remove com
 ```
 8 - OPTIONAL -- Additional Filters
     To obtain additional filters simply add the $aaFilter to your models
-        eg. public $aaFilter = array("start_desc", "start_platform", "end_desc", "end_platform");
+        eg. public $filter_fields = array("start_desc", "start_platform", "end_desc", "end_platform");
         This would let you search on any or either of these fields multiple fields will AND together.
 
 9 - OPTIONAL -- Scopes
